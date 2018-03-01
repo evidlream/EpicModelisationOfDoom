@@ -60,10 +60,11 @@ class Test
    public static void main(String[] args)
 	 {
 	 	//lecture fichier
-	 	int[][] b = SeamCarving.readpgm("img.pgm");
+	 	int[][] b = SeamCarving.readpgm("test.pgm");
 	 	//recherche point a supprimer
-	   ArrayList<Integer> a = SeamCarving.dijkstra(SeamCarving.toGraph(SeamCarving.interest(b)));
+		 Graph g = SeamCarving.toGraph(SeamCarving.interest(b));
+	   //int[][] a = SeamCarving.dijkstra(SeamCarving.toGraph(SeamCarving.interest(b)));
 
-	   SeamCarving.writePGM(SeamCarving.supChemin(b,a),"res.pgm");
+	   //SeamCarving.writePGM(SeamCarving.supChemin(b,a),"res.pgm");
 	 }
 }

@@ -9,5 +9,11 @@ class Edge
 		this.to = y;
 		this.cost = cost;
 	 }
+
+	public void invert(){
+   	int tmp = from;
+   	from = to;
+   	to = tmp;
+	}
    
 }

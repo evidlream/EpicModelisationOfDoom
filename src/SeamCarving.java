@@ -92,33 +92,66 @@ public class SeamCarving
 	}
 	
 	public static Graph toGraph(int[][] intr) {
-	       int n = intr.length;
-	       int m = intr[0].length;
-	       int i,j;
-	       Graph g = new Graph(n*m+2);
+		int n = intr.length;
+		int m = intr[0].length;
+		int i,j;
+		Graph g = new Graph((n*(m*2)+2));
 
-	       for(i =0;i < n-1;i++){
-	       		for(j =0;j < m;j++){
-	       			g.addEdge(new Edge(j+m*i,j+m*(i+1),intr[i][j]));
-	       			if(j > 0)
-	       				g.addEdge(new Edge(j+m*i,j+m*(i+1)-1,intr[i][j]));
-	       			if(j < m-1)
-	       				g.addEdge(new Edge(j+m*i,j+m*(i+1)+1,intr[i][j]));
+		for(i =0;i < 2*n-1;i=i+2){
+			for(j = 0;j < m;j++) {
+				g.addEdge(new Edge(j + m * i, j + m * (i + 1), intr[i / 2][j]));
+				if (j > 0)
+					g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, intr[i / 2][j]));
+				if (j < m - 1)
+					g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, intr[i / 2][j]));
+			}
+			//arrete de poid zero (duplication des sommets)
+			if (i < (2 * n - 2)) {
+				for(j = 0;j < m;j++) {
+
+					g.addEdge(new Edge(j + m * (i + 1), j + m * (i + 1) + m, 0));
+
 				}
-		   }
+			}
+		}
 
 		//on fait les arrete des derniers sommet du graph
 		for (j = 0; j < m ; j++) {
-			g.addEdge(new Edge((n-1)*m+j, n * m, intr[n - 1][j]));
+			g.addEdge(new Edge(((2*n)-1)*m+j, (2*n) * m, intr[n - 1][j]));
 		}
 		// on met les arrete de base � premi�re ligne � 0
-		for (j = 0; j < m ; j++)
-			g.addEdge(new Edge(n*m+1, j, 0));
+		for (j = 0; j < m ; j++) {
+			g.addEdge(new Edge((2 * n) * m + 1, j, 0));
+		}
+
+		Iterator ite;
+		Edge edge;
+		int coupFrom, coupTo;
+		int[][] plusCourt = dijkstra(g);
+
+		for(int tmp =0;tmp < g.vertices();tmp++){
+			ite = g.adj(tmp).iterator();
+			while(ite.hasNext()){
+				edge = (Edge) (ite.next());
+				if(edge.from == tmp) {
+					coupFrom = plusCourt[edge.from][0];
+					coupTo = plusCourt[edge.to][0];
+					edge.cost = (edge.cost + coupFrom - coupTo);
+				}
+			}
+		}
 
 	    return g;
 	   }
-	
-	public static ArrayList<Integer> dijkstra(Graph g){
+
+	/**
+	 * renvoi une matrice ou chaque indice correspond a un numéro de sommet du graphe en paramètre et chaque case un couple cout/predecesseur
+	 * => res[5][0] = cout du sommet 5
+	 * => res [5][1] = predecesseur du sommet 5 pour le chemin le plus court
+	 * @param g
+	 * @return
+	 */
+	public static int[][] dijkstra(Graph g){
 
 		int vertices = g.vertices();
 		int[][] distances = new int[vertices][2];
@@ -129,6 +162,7 @@ public class SeamCarving
 			//predecesseur
 			distances[i][1] = -1;
 		}
+
 		// initialisation racine
 		distances[vertices-1][0] = 0;
 
@@ -144,7 +178,6 @@ public class SeamCarving
 		while(!heap.isEmpty()){
 			//recuperation de l'element courant
 			element = heap.pop();
-
 			voisins = g.adj(element).iterator();
 			while(voisins.hasNext()){
 				tmp = (Edge)(voisins.next());
@@ -157,22 +190,32 @@ public class SeamCarving
 				}
 			}
 		}
-
-		// on initialise k au noeud de fin
-		int k = vertices-2;
-		ArrayList<Integer> res = new ArrayList();
-		//tant qu'on est pas a la racine on ajoute le predecesseur a la liste
-		while(k != vertices-1){
-			k = distances[k][1];
-			res.add(k);
-		}
-		//on supprime la racine de la liste
-		res.remove(res.size()-1);
-
-		return res;
+		return distances;
 	}
 
-	public static int[][] supChemin(int[][] b,ArrayList<Integer> a){
+	/**
+	 * cherche le chemin le plus court avec la matrice passé en paramètre (couple valeur, predecesseur) et le supprime de la matrice b (interest)
+	 * @param b
+	 * @param distances
+	 * @return
+	 */
+	public static int[][] supChemin(int[][] b,int[][] distances){
+
+
+		//recuperation du chemin le plus court
+		// on initialise k au noeud de fin
+		int taille = (distances.length);
+		int k = taille-2;
+		ArrayList<Integer> a = new ArrayList();
+		//tant qu'on est pas a la racine on ajoute le predecesseur a la liste
+		while(k != taille-1){
+			k = distances[k][1];
+			a.add(k);
+		}
+		//on supprime la racine de la liste
+		a.remove(a.size()-1);
+
+
 		int [][] n = new int[b.length][b[0].length-1];
 		for (int i = 0; i < b.length; i++) {
 			for (int j = 0; j < b[0].length; j++) {
@@ -180,7 +223,6 @@ public class SeamCarving
 					n[i][j] = b[i][j];
 				}
 				else{
-					System.out.println(a.get(a.size()-1-i));
 					for(int h =j+1;h < b[0].length;h++)
 						n[i][h-1] = b[i][h];
 				}
@@ -188,6 +230,51 @@ public class SeamCarving
 		}
 		return n;
 	}
+
+
+	/*public static ArrayList<Integer> twopath(Graph g, int s,int t){
+
+		//arrayList sommet a supprimer
+		ArrayList<Integer> res = new ArrayList<>();
+
+
+		//retournement des aretes
+		int[][] plusCourt = dijkstra(g);
+		int taille = plusCourt.length;
+		int k = taille-2;
+		Iterator<Edge> ite;
+		Edge edge;
+
+		while(k != taille-1){
+			ite = g.adj(plusCourt[k][1]).iterator();
+			while(ite.hasNext()){
+				edge = ite.next();
+				if(edge.from == plusCourt[k][1] && edge.to == k){
+					edge.invert();
+					res.add(k);
+				}
+			}
+			k = plusCourt[k][1];
+		}
+
+		//on supprime le sommet de fin
+		res.remove(taille-2);
+
+		//second appel dijsktra
+		plusCourt = dijkstra(g);
+
+		//second parcour
+		while(k != taille-1){
+			if(!res.contains(k))
+				res.add(k);
+			k = plusCourt[k][1];
+		}
+		//on supprime le sommet de fin
+		res.remove(taille-2);
+
+
+		return res;
+	}*/
 
    
 }
