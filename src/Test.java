@@ -62,9 +62,9 @@ class Test
 	 	//lecture fichier
 	 	int[][] b = SeamCarving.readpgm("test.pgm");
 	 	//recherche point a supprimer
-		 Graph g = SeamCarving.toGraph(SeamCarving.interest(b));
-	   //int[][] a = SeamCarving.dijkstra(SeamCarving.toGraph(SeamCarving.interest(b)));
-
+		 //SeamCarving.toGraph(SeamCarving.interest(b)).writeFile("test.txt");
+	   ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
+System.out.println(5);
 	   //SeamCarving.writePGM(SeamCarving.supChemin(b,a),"res.pgm");
 	 }
 }

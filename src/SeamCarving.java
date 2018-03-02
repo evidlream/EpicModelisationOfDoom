@@ -95,33 +95,31 @@ public class SeamCarving
 		int n = intr.length;
 		int m = intr[0].length;
 		int i,j;
-		Graph g = new Graph((n*(m*2)+2));
-
-		for(i =0;i < 2*n-1;i=i+2){
+		Graph g = new Graph(2+n*2*m-2*m);
+		for(i =0;i < 2*n-2;i++){
 			for(j = 0;j < m;j++) {
-				g.addEdge(new Edge(j + m * i, j + m * (i + 1), intr[i / 2][j]));
-				if (j > 0)
-					g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, intr[i / 2][j]));
-				if (j < m - 1)
-					g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, intr[i / 2][j]));
-			}
-			//arrete de poid zero (duplication des sommets)
-			if (i < (2 * n - 2)) {
-				for(j = 0;j < m;j++) {
-
-					g.addEdge(new Edge(j + m * (i + 1), j + m * (i + 1) + m, 0));
-
+				if(i%2 == 0 || i == 0) {
+					g.addEdge(new Edge(j + m * i, j + m * (i + 1), intr[i/2][j]));
+					if (j > 0)
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, intr[i/2][j]));
+					if (j < m - 1)
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, intr[i/2][j]));
+				}
+				else{
+					//arrete de poid zero (duplication des sommets)
+					if(i < 2*n-3)
+						g.addEdge(new Edge(j+m*i,j + m * (i + 1),0));
 				}
 			}
 		}
 
 		//on fait les arrete des derniers sommet du graph
 		for (j = 0; j < m ; j++) {
-			g.addEdge(new Edge(((2*n)-1)*m+j, (2*n) * m, intr[n - 1][j]));
+			g.addEdge(new Edge(j+(n*2-3)*m, n*2*m-2*m, intr[n - 1][j]));
 		}
 		// on met les arrete de base � premi�re ligne � 0
 		for (j = 0; j < m ; j++) {
-			g.addEdge(new Edge((2 * n) * m + 1, j, 0));
+			g.addEdge(new Edge(1+n*2*m-2*m, j, 0));
 		}
 
 		Iterator ite;
@@ -182,7 +180,8 @@ public class SeamCarving
 			while(voisins.hasNext()){
 				tmp = (Edge)(voisins.next());
 				// mise a jour des distances
-				if(distances[tmp.to][0] > distances[tmp.from][0]+tmp.cost){
+				if(distances[tmp.to][0] > distances[tmp.from][0]+tmp.cost && distances[tmp.from][0] != Integer.MAX_VALUE){
+
 					distances[tmp.to][0] = distances[tmp.from][0]+tmp.cost;
 					heap.decreaseKey(tmp.to,distances[tmp.to][0]);
 					//sauvegarde predecesseur
@@ -232,33 +231,44 @@ public class SeamCarving
 	}
 
 
-	/*public static ArrayList<Integer> twopath(Graph g, int s,int t){
+	public static ArrayList<Integer> twopath(Graph g, int s ,int t){
 
 		//arrayList sommet a supprimer
 		ArrayList<Integer> res = new ArrayList<>();
 
 
 		//retournement des aretes
+		int debut = s;
+		int fin = t;
+
 		int[][] plusCourt = dijkstra(g);
 		int taille = plusCourt.length;
-		int k = taille-2;
+
+		//par default : debut = racine, fin = "ciel"
+		if(debut < 0)
+			debut = taille-1;
+		if(fin < 0)
+			fin = taille-2;
+
+		int k = fin;
+
 		Iterator<Edge> ite;
 		Edge edge;
 
-		while(k != taille-1){
+		while(k != debut){
 			ite = g.adj(plusCourt[k][1]).iterator();
 			while(ite.hasNext()){
 				edge = ite.next();
 				if(edge.from == plusCourt[k][1] && edge.to == k){
 					edge.invert();
-					res.add(k);
+					if(k != fin && edge.from != debut)
+						res.add(k);
 				}
 			}
 			k = plusCourt[k][1];
 		}
-
-		//on supprime le sommet de fin
-		res.remove(taille-2);
+		for(int i =0;i < res.size();i++)
+			System.out.println(res.get(i));
 
 		//second appel dijsktra
 		plusCourt = dijkstra(g);
@@ -266,15 +276,14 @@ public class SeamCarving
 		//second parcour
 		while(k != taille-1){
 			if(!res.contains(k))
-				res.add(k);
+				if(k != taille-2)
+					res.add(k);
 			k = plusCourt[k][1];
 		}
-		//on supprime le sommet de fin
-		res.remove(taille-2);
 
 
 		return res;
-	}*/
+	}
 
    
 }
