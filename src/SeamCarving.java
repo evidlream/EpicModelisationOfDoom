@@ -141,7 +141,7 @@ public class SeamCarving
             g.addEdge(new Edge(1+n*2*m-2*m, j, 0));
         }
 
-        Iterator ite;
+        Iterator<Edge> ite;
         Edge edge;
         int coupFrom, coupTo;
         int[][] plusCourt = dijkstra(g);
@@ -149,7 +149,7 @@ public class SeamCarving
         for(int tmp =0;tmp < g.vertices();tmp++){
             ite = g.adj(tmp).iterator();
             while(ite.hasNext()){
-                edge = (Edge) (ite.next());
+                edge = ite.next();
                 if(edge.from == tmp) {
                     coupFrom = plusCourt[edge.from][0];
                     coupTo = plusCourt[edge.to][0];
@@ -186,7 +186,7 @@ public class SeamCarving
         heap.decreaseKey(vertices-1,0);
 
         int element;
-        Iterator voisins;
+        Iterator<Edge> voisins;
         Edge tmp;
 
         while(!heap.isEmpty()){
@@ -194,7 +194,7 @@ public class SeamCarving
             element = heap.pop();
             voisins = g.adj(element).iterator();
             while(voisins.hasNext()){
-                tmp = (Edge)(voisins.next());
+                tmp = voisins.next();
                 /* Mise a jour des distances */
                 if(distances[tmp.to][0] > distances[tmp.from][0]+tmp.cost && distances[tmp.from][0] != Integer.MAX_VALUE){
 
