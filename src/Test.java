@@ -1,4 +1,6 @@
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 class Test
 {
@@ -59,12 +61,50 @@ class Test
    
    public static void main(String[] args)
 	 {
-	 	//lecture fichier
-	 	int[][] b = SeamCarving.readpgm("test.pgm");
-	 	//recherche point a supprimer
-		 //SeamCarving.toGraph(SeamCarving.interest(b)).writeFile("test.txt");
-	   ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
-System.out.println(5);
+	 	String filename ="";
+
+	 	/* File selection */
+	 	if (args.length == 1){
+	 		filename = args[0];
+			if(!filename.endsWith(".pgm"))
+				filename = filename + ".pgm";
+	 		System.out.println("Steam Carving:");
+	 		System.out.println("\tSelected file: "+"\u001B[36m"+"filename"+"\u001B[0m");
+		} else {
+			System.out.println("Steam Carving:");
+			System.out.println("\t"+"\u001B[31m"+"No arguments or too many were imputed."+"\u001B[0m");
+			System.out.println("\tProceeding to manual input...");
+			System.out.println("Please type the file name:");
+			Scanner sc = new Scanner(System.in);
+			filename = sc.next();
+			if(!filename.endsWith(".pgm"))
+				filename = filename + ".pgm";
+			System.out.println("\tSelected file: "+"\u001B[36m"+filename+"\u001B[0m");
+		}
+
+		/* Testing if the file exists */
+
+		 File f = new File(filename);
+		 if(!f.exists() || f.isDirectory()) {
+			 System.out.println("Steam Carving:");
+			 System.out.println("\t"+"\u001B[31m"+"Fatal: File not found"+"\u001B[0m");
+			 System.exit(1);
+		 }
+
+	 	//int[][] b = SeamCarving.readpgm(filename);
+
+	 	/* Internal processing */
+		 System.out.println("Steam Carving:");
+		 System.out.println("\tStarting internal data treatment...");
+	   //ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
+		 // whatever bs you want to input there
+		/* Output */
+
+		String output = filename.substring(0,filename.lastIndexOf('.')) +"_carved.pgm";
+		System.out.println("Steam Carving:");
+		System.out.println("\tProcess finished.");
+		System.out.println("\tResult will be writen to: "+"\u001B[36m"+output+"\u001B[0m");
+
 	   //SeamCarving.writePGM(SeamCarving.supChemin(b,a),"res.pgm");
 	 }
 }
