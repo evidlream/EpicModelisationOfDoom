@@ -95,15 +95,24 @@ public class SeamCarving
 		int n = intr.length;
 		int m = intr[0].length;
 		int i,j;
+		int cost,costP, costM;
 		Graph g = new Graph(2+n*2*m-2*m);
 		for(i =0;i < 2*n-2;i++){
 			for(j = 0;j < m;j++) {
 				if(i%2 == 0 || i == 0) {
-					g.addEdge(new Edge(j + m * i, j + m * (i + 1), intr[i/2][j]));
+				    if(j+1 > m-1)
+				        costP = 0;
+				    else costP = intr[i/2][j+1];
+
+				    if(j-1 < 0)
+				        costM = 0;
+				    else costM = intr[i/2][j-1];
+
+					g.addEdge(new Edge(j + m * i, j + m * (i + 1), costP-costM));
 					if (j > 0)
-						g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, intr[i/2][j]));
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, costM-intr[i/2+1][j]));
 					if (j < m - 1)
-						g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, intr[i/2][j]));
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, costP-intr[i/2+1][j]));
 				}
 				else{
 					//arrete de poid zero (duplication des sommets)
@@ -115,7 +124,13 @@ public class SeamCarving
 
 		//on fait les arrete des derniers sommet du graph
 		for (j = 0; j < m ; j++) {
-			g.addEdge(new Edge(j+(n*2-3)*m, n*2*m-2*m, intr[n - 1][j]));
+		    if(j < 1)
+		        cost = -intr[n-1][j+1];
+            else if(j == m-1)
+                    cost = intr[n-1][j-1];
+                else
+		            cost = intr[n - 1][j-1] - intr[n-1][j+1];
+			g.addEdge(new Edge(j+(n*2-3)*m, n*2*m-2*m, cost));
 		}
 		// on met les arrete de base � premi�re ligne � 0
 		for (j = 0; j < m ; j++) {
