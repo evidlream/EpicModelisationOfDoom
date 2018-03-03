@@ -21,7 +21,7 @@ public class SeamCarving
 	}
 
    public static int[][] readpgm(String fn)
-	 {		
+	 {
         try {
             InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(fn);
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
@@ -195,37 +195,38 @@ public class SeamCarving
 	/**
 	 * cherche le chemin le plus court avec la matrice passé en paramètre (couple valeur, predecesseur) et le supprime de la matrice b (interest)
 	 * @param b
-	 * @param distances
+	 * @param sommets
 	 * @return
 	 */
-	public static int[][] supChemin(int[][] b,int[][] distances){
+	public static int[][] supprimerSommet(int[][] b,ArrayList<Integer> sommets){
 
-
-		//recuperation du chemin le plus court
-		// on initialise k au noeud de fin
-		int taille = (distances.length);
-		int k = taille-2;
-		ArrayList<Integer> a = new ArrayList();
-		//tant qu'on est pas a la racine on ajoute le predecesseur a la liste
-		while(k != taille-1){
-			k = distances[k][1];
-			a.add(k);
-		}
-		//on supprime la racine de la liste
-		a.remove(a.size()-1);
-
-
-		int [][] n = new int[b.length][b[0].length-1];
+		int [][] n = new int[b.length][b[0].length - 2];
+		int decalage = 0;
+		int test = 0;
 		for (int i = 0; i < b.length; i++) {
 			for (int j = 0; j < b[0].length; j++) {
-				if (a.get(a.size()-1-i) != i*b.length+j && j < b[0].length-1) {
-					n[i][j] = b[i][j];
+
+				if(i == 0) {
+					//debut
+					test = i * b[0].length + j;
 				}
-				else{
-					for(int h =j+1;h < b[0].length;h++)
-						n[i][h-1] = b[i][h];
+				else {
+					if (i == b.length - 1) {
+						//fin
+						test = 2 * (i - 1) * b[0].length + j;
+					} else {
+						//intermediaire
+						test = 2 * i * b[0].length + j;
+					}
 				}
+				//traitement des sommets
+				if(sommets.contains(test)){
+					decalage++;
+				}
+				else n[i][j-decalage] = b[i][j];
+
 			}
+			decalage = 0;
 		}
 		return n;
 	}
@@ -235,7 +236,6 @@ public class SeamCarving
 
 		//arrayList sommet a supprimer
 		ArrayList<Integer> res = new ArrayList<>();
-
 
 		//retournement des aretes
 		int debut = s;
@@ -267,12 +267,11 @@ public class SeamCarving
 			}
 			k = plusCourt[k][1];
 		}
-		for(int i =0;i < res.size();i++)
-			System.out.println(res.get(i));
 
 		//second appel dijsktra
 		plusCourt = dijkstra(g);
 
+		k = taille-2;
 		//second parcour
 		while(k != taille-1){
 			if(!res.contains(k))
@@ -280,7 +279,6 @@ public class SeamCarving
 					res.add(k);
 			k = plusCourt[k][1];
 		}
-
 
 		return res;
 	}

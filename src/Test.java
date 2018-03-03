@@ -91,13 +91,15 @@ class Test
 			 System.exit(1);
 		 }
 
-	 	//int[][] b = SeamCarving.readpgm(filename);
 
 	 	/* Internal processing */
 		 System.out.println("Steam Carving:");
 		 System.out.println("\tStarting internal data treatment...");
-	   //ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
-		 // whatever bs you want to input there
+
+		 int[][] b = SeamCarving.readpgm(filename);
+		 ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
+		 int[][] im = SeamCarving.supprimerSommet(b,a);
+
 		/* Output */
 
 		String output = filename.substring(0,filename.lastIndexOf('.')) +"_carved.pgm";
@@ -105,6 +107,6 @@ class Test
 		System.out.println("\tProcess finished.");
 		System.out.println("\tResult will be writen to: "+"\u001B[36m"+output+"\u001B[0m");
 
-	   //SeamCarving.writePGM(SeamCarving.supChemin(b,a),"res.pgm");
+	   SeamCarving.writePGM(im,output);
 	 }
 }
