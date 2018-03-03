@@ -186,7 +186,7 @@ class Test
 		} else if (choice==0) {
 			check = b.length;
 		}
-		if ((amount >= check)&&(rm == 1) ){
+		if ((amount >= check)&&(rm == 0) ){
 			System.out.println("Steam Carving:");
 			System.out.println("\t"+"\u001B[31m"+"Fatal: Too many "+cc+" to delete"+"\u001B[0m");
 			System.out.println("\t"+"\u001B[31m"+amount+" "+cc+" requested"+"\u001B[0m");
@@ -198,12 +198,14 @@ class Test
 		if(choice == 1){
 			b = SeamCarving.turnMatrice90(b);
 		}
-
-		ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
-
-		int[][] im = SeamCarving.supprimerSommet(b,a);
-
-		if(choice == 1)
+		int[][] im = b;
+		for(int x =0; x  < amount/2;x++) {
+			ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(im)), -1, -1);
+			if(rm == 0)
+				im = SeamCarving.supprimerSommet(im, a);
+			else im= SeamCarving.ajoutSommet(im,a);
+		}
+		if(choice == 0)
 			im = SeamCarving.turnMatrice90(im);
 
 		/* Output */

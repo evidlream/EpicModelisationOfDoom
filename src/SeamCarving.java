@@ -309,4 +309,39 @@ public class SeamCarving
         return res;
     }
 
+    public static int[][] ajoutSommet(int[][] image, ArrayList<Integer> sommets){
+
+        int [][] n = new int[image.length][image[0].length + 2];
+        int decalage = 0;
+        int test = 0;
+        for (int i = 0; i < image.length; i++) {
+            for (int j = 0; j < image[0].length; j++) {
+
+                if(i == 0) {
+                    //debut
+                    test = i * image[0].length + j;
+                }
+                else {
+                    if (i == image.length - 1) {
+                        //fin
+                        test = 2 * (i - 1) * image[0].length + j;
+                    } else {
+                        //intermediaire
+                        test = 2 * i * image[0].length + j;
+                    }
+                }
+                //traitement des sommets
+                if(sommets.contains(test)){
+                    decalage++;
+                    n[i][j] = image[i][j];
+                    n[i][j+1] = image[i][j];
+                }
+                else n[i][j+decalage] = image[i][j];
+
+            }
+            decalage = 0;
+        }
+        return n;
+    }
+
 }
