@@ -5,18 +5,18 @@ import java.util.Scanner;
 
 class Test
 {
-   static boolean visite[];
-   public static void dfs(Graph g, int u)
-	 {
+	static boolean visite[];
+	public static void dfs(Graph g, int u)
+	{
 		visite[u] = true;
 		System.out.println("Je visite " + u);
 		for (Edge e: g.next(u))
-		  if (!visite[e.to])
-			dfs(g,e.to);
-	 }
+			if (!visite[e.to])
+				dfs(g,e.to);
+	}
 
-   public static void testHeap()
-	 {
+	public static void testHeap()
+	{
 		// Crée ue file de priorité contenant les entiers de 0 à 9, tous avec priorité +infty
 		Heap h = new Heap(10);
 		h.decreaseKey(3,1664);
@@ -35,44 +35,44 @@ class Test
 		x=  h.pop();
 		System.out.println("On a enlevé "+x+" de la file, dont la priorité était " + h.priority(x));
 		// La file contient maintenant uniquement les éléments 0,1,5,6,7,8,9 avec priorité +infini
-	 }
-   
-   public static void testGraph()
-	 {
+	}
+
+	public static void testGraph()
+	{
 		int n = 5;
 		int i,j;
 		Graph g = new Graph(n*n+2);
-		
-		for (i = 0; i < n-1; i++)
-		  for (j = 0; j < n ; j++)
-			g.addEdge(new Edge(n*i+j, n*(i+1)+j, 1664 - (i+j)));
 
-		for (j = 0; j < n ; j++)		  
-		  g.addEdge(new Edge(n*(n-1)+j, n*n, 666));
-		
-		for (j = 0; j < n ; j++)					
-		  g.addEdge(new Edge(n*n+1, j, 0));
-		
+		for (i = 0; i < n-1; i++)
+			for (j = 0; j < n ; j++)
+				g.addEdge(new Edge(n*i+j, n*(i+1)+j, 1664 - (i+j)));
+
+		for (j = 0; j < n ; j++)
+			g.addEdge(new Edge(n*(n-1)+j, n*n, 666));
+
+		for (j = 0; j < n ; j++)
+			g.addEdge(new Edge(n*n+1, j, 0));
+
 		g.addEdge(new Edge(13,17,1337));
 		g.writeFile("test.dot");
 		// dfs à partir du sommet 3
 		visite = new boolean[n*n+2];
 		dfs(g, 3);
-	 }
-   
-   public static void main(String[] args)
-	 {
-	 	String filename ="";
-		 Scanner sc = new Scanner(System.in);
+	}
+
+	public static void main(String[] args)
+	{
+		String filename ="";
+		Scanner sc = new Scanner(System.in);
 
 
-	 	/* File selection */
-	 	if (args.length == 1){
-	 		filename = args[0];
+		/* File selection */
+		if (args.length == 1){
+			filename = args[0];
 			if(!filename.endsWith(".pgm"))
 				filename = filename + ".pgm";
-	 		System.out.println("Steam Carving:");
-	 		System.out.println("\tSelected file: "+"\u001B[36m"+filename+"\u001B[0m");
+			System.out.println("Steam Carving:");
+			System.out.println("\tSelected file: "+"\u001B[36m"+filename+"\u001B[0m");
 		} else {
 			System.out.println("Steam Carving:");
 			System.out.println("\t"+"\u001B[31m"+"No arguments or too many were imputed."+"\u001B[0m");
@@ -86,45 +86,45 @@ class Test
 
 		/* Testing if the file exists */
 
-		 File f = new File(filename);
-		 if(!f.exists() || f.isDirectory()) {
-			 System.out.println("Steam Carving:");
-			 System.out.println("\t"+"\u001B[31m"+"Fatal: File not found"+"\u001B[0m");
-			 System.exit(1);
-		 }
+		File f = new File(filename);
+		if(!f.exists() || f.isDirectory()) {
+			System.out.println("Steam Carving:");
+			System.out.println("\t"+"\u001B[31m"+"Fatal: File not found"+"\u001B[0m");
+			System.exit(1);
+		}
 
-		 /* Asking if lines or columns shall be removed */
-		 System.out.println("Steam Carving:");
-		 System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to remove columns or lines"+"\u001B[0m");
-		 System.out.println("\t\t"+"\u001B[32m"+"(0)"+"\u001B[0m"+" Columns");
-		 System.out.println("\t\t"+"\u001B[32m"+"(1)"+"\u001B[0m"+" Lines");
-		 System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
+		/* Asking if lines or columns shall be removed */
+		System.out.println("Steam Carving:");
+		System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to remove columns or lines"+"\u001B[0m");
+		System.out.println("\t\t"+"\u001B[32m"+"(0)"+"\u001B[0m"+" Columns");
+		System.out.println("\t\t"+"\u001B[32m"+"(1)"+"\u001B[0m"+" Lines");
+		System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
 
-		 int choice = -1;
-		 try {
-			 choice = sc.nextInt();
-			 if (choice == 0){
-				 System.out.println("\t\t"+"\u001B[32m"+"Columns selected."+"\u001B[0m");
-			 } else if (choice ==1){
-				 System.out.println("\t\t"+"\u001B[32m"+"Lines selected."+"\u001B[0m");
-			 }else {
-				 System.out.println("Steam Carving:");
-				 System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
-				 System.exit(0);
-			 }
-		 } catch (InputMismatchException e){
-			 System.out.println("Steam Carving:");
-			 System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
-			 System.exit(0);
-		 }
+		int choice = -1;
+		try {
+			choice = sc.nextInt();
+			if (choice == 0){
+				System.out.println("\t\t"+"\u001B[32m"+"Columns selected."+"\u001B[0m");
+			} else if (choice ==1){
+				System.out.println("\t\t"+"\u001B[32m"+"Lines selected."+"\u001B[0m");
+			}else {
+				System.out.println("Steam Carving:");
+				System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+				System.exit(0);
+			}
+		} catch (InputMismatchException e){
+			System.out.println("Steam Carving:");
+			System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+			System.exit(0);
+		}
 
-		 /* Internal processing */
-		 System.out.println("Steam Carving:");
-		 System.out.println("\tStarting internal data treatment...");
+		/* Internal processing */
+		System.out.println("Steam Carving:");
+		System.out.println("\tStarting internal data treatment...");
 
-		 int[][] b = SeamCarving.readpgm(filename);
-		 ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
-		 int[][] im = SeamCarving.supprimerSommet(b,a);
+		int[][] b = SeamCarving.readpgm(filename);
+		ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
+		int[][] im = SeamCarving.supprimerSommet(b,a);
 
 		/* Output */
 
@@ -133,6 +133,6 @@ class Test
 		System.out.println("\tProcess finished.");
 		System.out.println("\tResult will be writen to: "+"\u001B[36m"+output+"\u001B[0m");
 
-	   SeamCarving.writePGM(im,output);
-	 }
+		SeamCarving.writePGM(im,output);
+	}
 }
