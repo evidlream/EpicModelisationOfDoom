@@ -32,7 +32,8 @@ public class SeamCarving
     public static int[][] readpgm(String fn)
     {
         try {
-            InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(fn);
+            File og = new File(fn);
+            InputStream f = new FileInputStream(og);
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
             String magic = d.readLine();
             String line = d.readLine();
