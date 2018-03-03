@@ -93,9 +93,36 @@ class Test
 			System.exit(1);
 		}
 
+		System.out.println("Steam Carving:");
+		System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to reduce or expand the image"+"\u001B[0m");
+		System.out.println("\t\t"+"\u001B[32m"+"(0)"+"\u001B[0m"+" Reduce");
+		System.out.println("\t\t"+"\u001B[32m"+"(1)"+"\u001B[0m"+" Expand");
+		System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
+
+		int rm = -1;
+		String ca= "";
+		try {
+			rm = sc.nextInt();
+			if (rm == 0){
+				System.out.println("\t\t"+"\u001B[32m"+"Pixels will be deleted."+"\u001B[0m");
+				ca = "remove";
+			} else if (rm ==1){
+				System.out.println("\t\t"+"\u001B[32m"+"Pixels will be added."+"\u001B[0m");
+				ca = "add";
+			}else {
+				System.out.println("Steam Carving:");
+				System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+				System.exit(0);
+			}
+		} catch (InputMismatchException e){
+			System.out.println("Steam Carving:");
+			System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+			System.exit(0);
+		}
+
 		/* Asking if lines or columns shall be removed */
 		System.out.println("Steam Carving:");
-		System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to remove columns or lines"+"\u001B[0m");
+		System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to "+ ca +" columns or lines"+"\u001B[0m");
 		System.out.println("\t\t"+"\u001B[32m"+"(0)"+"\u001B[0m"+" Columns");
 		System.out.println("\t\t"+"\u001B[32m"+"(1)"+"\u001B[0m"+" Lines");
 		System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
@@ -109,7 +136,7 @@ class Test
 				cc = "columns";
 			} else if (choice ==1){
 				System.out.println("\t\t"+"\u001B[32m"+"Lines selected."+"\u001B[0m");
-				cc = "lines";0
+				cc = "lines";
 			}else {
 				System.out.println("Steam Carving:");
 				System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
@@ -120,13 +147,19 @@ class Test
 			System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
 			System.exit(0);
 		}
+
 		/* Amount of deletes */
-		System.out.println("\t"+"\u001B[35m"+"Please choose how many "+cc+" you wish to remove:"+"\u001B[0m");
+		System.out.println("\t"+"\u001B[35m"+"Please choose how many "+cc+" you wish to "+ca+":"+"\u001B[0m");
+		System.out.println("\t"+"\u001B[34m"+"Please note that that number needs to be a multiple of 2"+"\u001B[0m");
+		System.out.println("\t"+"\u001B[34m"+"Non multiple of 2 numbers will be rounded to the inferior"+"\u001B[0m");
 		System.out.println("\t"+"\u001B[31m"+"Non numeric inputs and negative inputs will exit"+"\u001B[0m");
 
 		int amount = -1;
 		try {
 			amount = sc.nextInt();
+			if (amount%2!=0){
+				amount= amount-1;
+			}
 			if (amount>0){
 				System.out.println("\t\t"+"\u001B[32m"+amount+" "+cc+" selected."+"\u001B[0m");
 			}else {
@@ -139,8 +172,6 @@ class Test
 			System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
 			System.exit(0);
 		}
-
-
 
 		/* Internal processing */
 		System.out.println("Steam Carving:");
@@ -155,11 +186,11 @@ class Test
 		} else if (choice==0) {
 			check = b.length;
 		}
-		if (amount >= check){
+		if ((amount >= check)&&(rm == 1) ){
 			System.out.println("Steam Carving:");
 			System.out.println("\t"+"\u001B[31m"+"Fatal: Too many "+cc+" to delete"+"\u001B[0m");
 			System.out.println("\t"+"\u001B[31m"+amount+" "+cc+" requested"+"\u001B[0m");
-			System.out.println("\t"+"\u001B[31m"+b[0].length+" "+cc+" found"+"\u001B[0m");
+			System.out.println("\t"+"\u001B[31m"+check+" "+cc+" found"+"\u001B[0m");
 			System.exit(1);
 		}
 
