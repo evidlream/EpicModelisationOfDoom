@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 class Test
@@ -62,6 +63,8 @@ class Test
    public static void main(String[] args)
 	 {
 	 	String filename ="";
+		 Scanner sc = new Scanner(System.in);
+
 
 	 	/* File selection */
 	 	if (args.length == 1){
@@ -69,13 +72,12 @@ class Test
 			if(!filename.endsWith(".pgm"))
 				filename = filename + ".pgm";
 	 		System.out.println("Steam Carving:");
-	 		System.out.println("\tSelected file: "+"\u001B[36m"+"filename"+"\u001B[0m");
+	 		System.out.println("\tSelected file: "+"\u001B[36m"+filename+"\u001B[0m");
 		} else {
 			System.out.println("Steam Carving:");
 			System.out.println("\t"+"\u001B[31m"+"No arguments or too many were imputed."+"\u001B[0m");
 			System.out.println("\tProceeding to manual input...");
 			System.out.println("Please type the file name:");
-			Scanner sc = new Scanner(System.in);
 			filename = sc.next();
 			if(!filename.endsWith(".pgm"))
 				filename = filename + ".pgm";
@@ -91,8 +93,32 @@ class Test
 			 System.exit(1);
 		 }
 
+		 /* Asking if lines or columns shall be removed */
+		 System.out.println("Steam Carving:");
+		 System.out.println("\t"+"\u001B[32m"+"Please choose if you wish to remove columns or lines"+"\u001B[0m");
+		 System.out.println("\t\t"+"\u001B[32m"+"(0)"+"\u001B[0m"+" Columns");
+		 System.out.println("\t\t"+"\u001B[32m"+"(1)"+"\u001B[0m"+" Lines");
+		 System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
 
-	 	/* Internal processing */
+		 int choice = -1;
+		 try {
+			 choice = sc.nextInt();
+			 if (choice == 0){
+				 System.out.println("\t\t"+"\u001B[32m"+"Columns selected."+"\u001B[0m");
+			 } else if (choice ==1){
+				 System.out.println("\t\t"+"\u001B[32m"+"Lines selected."+"\u001B[0m");
+			 }else {
+				 System.out.println("Steam Carving:");
+				 System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+				 System.exit(0);
+			 }
+		 } catch (InputMismatchException e){
+			 System.out.println("Steam Carving:");
+			 System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+			 System.exit(0);
+		 }
+
+		 /* Internal processing */
 		 System.out.println("Steam Carving:");
 		 System.out.println("\tStarting internal data treatment...");
 
