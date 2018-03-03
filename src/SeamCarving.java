@@ -108,11 +108,11 @@ public class SeamCarving
 				        costM = 0;
 				    else costM = intr[i/2][j-1];
 
-					g.addEdge(new Edge(j + m * i, j + m * (i + 1), costP-costM));
+					g.addEdge(new Edge(j + m * i, j + m * (i + 1), Math.abs(costP-costM)));
 					if (j > 0)
-						g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, costM-intr[i/2+1][j]));
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) - 1, Math.abs(costM-intr[i/2+1][j])));
 					if (j < m - 1)
-						g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, costP-intr[i/2+1][j]));
+						g.addEdge(new Edge(j + m * i, j + m * (i + 1) + 1, Math.abs(costP-intr[i/2+1][j])));
 				}
 				else{
 					//arrete de poid zero (duplication des sommets)
@@ -129,7 +129,7 @@ public class SeamCarving
             else if(j == m-1)
                     cost = intr[n-1][j-1];
                 else
-		            cost = intr[n - 1][j-1] - intr[n-1][j+1];
+		            cost = Math.abs(intr[n - 1][j-1] - intr[n-1][j+1]);
 			g.addEdge(new Edge(j+(n*2-3)*m, n*2*m-2*m, cost));
 		}
 		// on met les arrete de base � premi�re ligne � 0
