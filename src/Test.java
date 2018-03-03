@@ -200,12 +200,12 @@ class Test
 		}
 		int[][] im = b;
 		for(int x =0; x  < amount/2;x++) {
-			ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(im)), -1, -1);
+			ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(im)));
 			if(rm == 0)
 				im = SeamCarving.supprimerSommet(im, a);
 			else im= SeamCarving.ajoutSommet(im,a);
 		}
-		if(choice == 0)
+		if(choice == 1)
 			im = SeamCarving.turnMatrice90(im);
 
 		/* Output */

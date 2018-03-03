@@ -258,23 +258,18 @@ public class SeamCarving
         return res;
     }
 
-    public static ArrayList<Integer> twopath(Graph g, int s ,int t) {
+    public static ArrayList<Integer> twopath(Graph g) {
 
         /* ArrayList des sommets à supprimer */
         ArrayList<Integer> res = new ArrayList<>();
 
-        //retournement des aretes
-        int debut = s;
-        int fin = t;
 
         int[][] plusCourt = dijkstra(g);
         int taille = plusCourt.length;
 
         /* Inversion des arcs */
-        if (debut < 0)
-            debut = taille - 1;
-        if (fin < 0)
-            fin = taille - 2;
+        int debut = taille -1;
+        int fin = taille -2;
 
         int k = fin;
 
