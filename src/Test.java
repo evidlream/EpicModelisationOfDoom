@@ -101,6 +101,7 @@ class Test
 		System.out.println("\t"+"\u001B[31m"+"Anthing else will exit"+"\u001B[0m");
 
 		int choice = -1;
+		String cc = "";
 		try {
 			choice = sc.nextInt();
 			if (choice == 0){
@@ -117,14 +118,41 @@ class Test
 			System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
 			System.exit(0);
 		}
+		/* nombre de suppression */
+        System.out.println("\t"+"\u001B[35m"+"Please choose how many "+cc+" you wish to remove:"+"\u001B[0m");
+        System.out.println("\t"+"\u001B[31m"+"Non numeric inputs and negative inputs will exit"+"\u001B[0m");
 
+        int amount = -1;
+        try {
+            amount = sc.nextInt();
+            if (amount>0){
+                System.out.println("\t\t"+"\u001B[32m"+amount+" "+cc+" selected."+"\u001B[0m");
+            }else {
+                System.out.println("Steam Carving:");
+                System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+                System.exit(0);
+            }
+        } catch (InputMismatchException e){
+            System.out.println("Steam Carving:");
+            System.out.println("\t"+"\u001B[31m"+"You chose to exit"+"\u001B[0m");
+            System.exit(0);
+        }
 		/* Internal processing */
 		System.out.println("Steam Carving:");
 		System.out.println("\tStarting internal data treatment...");
 
 		int[][] b = SeamCarving.readpgm(filename);
+
+		if(choice == 1){
+		    b = SeamCarving.turnMatrice90(b);
+        }
+
 		ArrayList<Integer> a = SeamCarving.twopath(SeamCarving.toGraph(SeamCarving.interest(b)),-1,-1);
+
 		int[][] im = SeamCarving.supprimerSommet(b,a);
+
+        if(choice == 1)
+            im = SeamCarving.turnMatrice90(im);
 
 		/* Output */
 
